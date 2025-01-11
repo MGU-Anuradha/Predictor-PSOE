@@ -24,9 +24,9 @@ output_bias = output_bias.flatten()
 
 # Build the TensorFlow model with the same architecture
 model = tf.keras.Sequential([
-    tf.keras.layers.Dense(100, activation='relu', input_shape=(2,), weights=[input_weights.T, biases_1]),  # Input -> Hidden Layer 1
-    tf.keras.layers.Dense(50, activation='relu', weights=[layer_weights_1.T, biases_2]),  # Hidden Layer 1 -> Hidden Layer 2
-    tf.keras.layers.Dense(50, activation='relu', weights=[layer_weights_2.T, biases_3]),  # Hidden Layer 2 -> Hidden Layer 3
+    tf.keras.layers.Dense(100, activation='tanh', input_shape=(2,), weights=[input_weights.T, biases_1]),  # Input -> Hidden Layer 1
+    tf.keras.layers.Dense(50, activation='tanh', weights=[layer_weights_1.T, biases_2]),  # Hidden Layer 1 -> Hidden Layer 2
+    tf.keras.layers.Dense(50, activation='tanh', weights=[layer_weights_2.T, biases_3]),  # Hidden Layer 2 -> Hidden Layer 3
     tf.keras.layers.Dense(1, activation='linear', weights=[output_weights.T, output_bias])  # Hidden Layer 3 -> Output
 ])
 
