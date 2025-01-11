@@ -33,6 +33,43 @@ model = tf.keras.Sequential([
 # Compile the model
 model.compile(optimizer='adam', loss='mean_squared_error')
 
+# Normalize input and output based on mapminmax
+def normalize_input(input_data):
+    # Apply the normalization formula based on the 'mapminmax' parameters
+    xmin = np.array([0, 0])
+    xmax = np.array([1.5, 1.5])
+    ymin = -1
+    ymax = 1
+    gain = np.array([1.3333, 1.3333])
+    offset = np.array([0, 0])
+
+    normalized_input = gain * (input_data - xmin) / (xmax - xmin) + offset
+    return normalized_input
+
+def normalize_output(output_data):
+    # Apply the normalization formula based on the 'mapminmax' parameters
+    xmin = 0
+    xmax = 1.5
+    ymin = -1
+    ymax = 1
+    gain = 1.3333
+    offset = 0
+
+    normalized_output = gain * (output_data - xmin) / (xmax - xmin) + offset
+    return normalized_output
+
+def denormalize_output(normalized_output):
+    # Reverse the normalization process
+    xmin = 0
+    xmax = 1.5
+    ymin = -1
+    ymax = 1
+    gain = 1.3333
+    offset = 0
+
+    denormalized_output = (normalized_output - offset) * (xmax - xmin) / gain + xmin
+    return denormalized_output
+
 # Initialize Flask app
 app = Flask(__name__)
 
@@ -50,11 +87,14 @@ def predict():
         # Prepare the input array (Vq, Vd)
         x_input = np.array([[Vq, Vd]])  # The model expects the input shape (1, 2)
 
-        # Predict using the model
-        prediction = model.predict(x_input)
+        # Normalize the input using the mapminmax scaling
+        x_input_normalized = normalize_input(x_input)
 
-        # Convert prediction to a regular Python float
-        prediction_value = float(prediction[0][0])
+        # Predict using the model
+        prediction = model.predict(x_input_normalized)
+
+        # Denormalize the prediction to match the MATLAB output range
+        prediction_value = denormalize_output(prediction[0][0])
 
         # Return the prediction as a JSON response
         return jsonify({'prediction': prediction_value})
