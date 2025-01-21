@@ -5,8 +5,14 @@ cd /d "%~dp0\backend"
 :: Activate the virtual environment
 call venv\Scripts\activate
 
-:: Run the Flask app
-python app.py
+:: Start the Flask app in a new terminal
+start cmd /k "python app.py"
 
-:: Pause to keep the window open after the app starts
-pause
+:: Navigate to the frontend directory
+cd /d "%~dp0\frontend"
+
+:: Start the React app in a new terminal
+start cmd /k "npm start"
+
+:: Exit the current batch file
+exit
