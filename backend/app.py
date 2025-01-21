@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 from scipy.io import loadmat
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 # Load the saved weights and biases from the .mat file
 mat = loadmat('network_weights_biases.mat')
@@ -73,6 +74,7 @@ def denormalize_output(normalized_output):
 # Initialize Flask app
 app = Flask(__name__)
 
+CORS(app, origins=["http://localhost:3000"])
 # Define the prediction endpoint
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -95,7 +97,7 @@ def predict():
 
         # Denormalize the prediction to match the MATLAB output range
         prediction_value = denormalize_output(prediction[0][0])
-
+        print(prediction_value)
         # Return the prediction as a JSON response
         return jsonify({'prediction': prediction_value})
 
