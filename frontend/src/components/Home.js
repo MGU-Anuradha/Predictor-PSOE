@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Grid, Typography, Button, List, ListItem, InputBase } from '@mui/material';
+import { Grid, Typography, Button, List, ListItem, InputBase, Box, useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import Header from './Header';
 import Footer from './Footer';
 import image from '../assests/images/NeuralNetwork.png'
@@ -13,8 +14,12 @@ function Home() {
     const [psoeValue, setPsoeValue] = useState(null);
     const [errorMessage, setErrorMessage] = useState('');
 
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+
     const handlePredictPSOE = async () => {
-        setErrorMessage(''); // Clear previous errors
+        // setPsoeValue("1.56897456")
+        setErrorMessage('');
         try {
             const response = await axios.post('http://127.0.0.1:5000/predict', {
                 Vd: parseFloat(vd),
@@ -49,13 +54,15 @@ function Home() {
                                 PMSM Performance
                             </Typography>
                         </Grid>
-                        <Grid item xs={6} md={6} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
-                            <img
-                                src={image}
-                                alt="MotorMind"
-                                style={{ width: '40%', height: 'auto', objectFit: 'contain' }}
-                            />
-                        </Grid>
+                        {!isMobile && (
+                            <Grid item xs={6} md={6} style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
+                                <img
+                                    src={image}
+                                    alt="MotorMind"
+                                    style={{ width: '40%', height: 'auto', objectFit: 'contain' }}
+                                />
+                            </Grid>
+                        )}
                     </Grid>
                 </Grid>
 
@@ -65,7 +72,7 @@ function Home() {
                         <InputBase
                             className={classes.textFeild}
                             type="text"
-                            placeholder="Enter Vd"
+                            placeholder="Enter Vd value in radian (rad)"
                             value={vd}
                             onChange={(e) => setVd(e.target.value)}
                             required
@@ -75,7 +82,7 @@ function Home() {
                         <InputBase
                             className={classes.textFeild}
                             type="text"
-                            placeholder="Enter Vq"
+                            placeholder="Enter Vq value in radian (rad)"
                             value={vq}
                             onChange={(e) => setVq(e.target.value)}
                             required
@@ -88,7 +95,7 @@ function Home() {
                             className={classes.button}
                             onClick={handlePredictPSOE}
                         >
-                            Predict PSOE
+                            Predict PSOE Value
                         </Button>
                     </Grid>
                 </Grid>
@@ -96,17 +103,29 @@ function Home() {
                 {/* Display PSOE Value */}
                 {psoeValue !== null && (
                     <Grid container spacing={2} style={{ marginTop: '20px' }}>
-                        <Grid item xs={6} md={4}>
-                            <Typography variant="body1" style={{ fontWeight: 'bold' }}>
-                                Predicted PSOE Value: {psoeValue}
-                            </Typography>
+                        <Grid item xs={6} md={8} container justifyContent="center" alignItems="center" >
+                            <Box
+                                sx={{
+                                    backgroundColor: "#0000FF",
+                                    color: "#FFFFFF",
+                                    padding: "15px 30px",
+                                    fontSize: "16px",
+                                    borderRadius: "8px",
+                                    width: "300px",
+                                    textTransform: "none",
+                                    border: "2px solid #a0a5ee",
+                                    textAlign: "center",
+                                }}
+                            >
+                                {psoeValue + " rad"}
+                            </Box>
                         </Grid>
                     </Grid>
                 )}
 
                 {/* Display Error Message */}
                 {errorMessage && (
-                    <Grid container spacing={2} style={{ paddingBottom: '20px'}}>
+                    <Grid container spacing={2} style={{ paddingBottom: '20px' }}>
                         <Grid item xs={6} md={6}>
                             <Typography variant="body1" style={{ color: 'red' }}>
                                 {errorMessage}
@@ -118,18 +137,19 @@ function Home() {
                 {/* Conditions */}
                 <Grid item xs={12}>
                     <Grid container spacing={0}>
-                        <Grid item xs={12} md={8}>
-                            <Typography variant="h6">Conditions:</Typography>
+                        <Grid item xs={12} md={8} style={{ marginTop: "40px" }}>
+                            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Conditions: </Typography>
+                            <Typography variant="body1">
+                                Currently, the PSOE value can only be predicted for PMSM motors operating under the following conditions,                            </Typography>
                             <List>
-                                <ListItem>
-                                    <Typography>Condition 1: This is the first condition.</Typography>
-                                </ListItem>
-                                <ListItem>
-                                    <Typography>Condition 2: This is the second condition.</Typography>
-                                </ListItem>
-                                <ListItem>
-                                    <Typography>Condition 3: This is the third condition.</Typography>
-                                </ListItem>
+                                <ListItem>• Number of Poles should be 8.</ListItem>
+                                <ListItem>• The motor speed should be 200 rpm.</ListItem>
+                                {/* <ListItem>• Current values I_qs^r ref should be 2A, and I_ds^r ref current is not required.</ListItem> */}
+                                <ListItem>• The Motor Phase Resistance should be 0.00714 Ω.</ListItem>
+                                <ListItem>• The Motor Phase Inductance should be 158.7915 μH.</ListItem>
+                                <ListItem>• The Back EMF Constant (𝜆𝑚′) should be 0.07598 V/(rads⁻¹).</ListItem>
+                                <ListItem>• The Vd value range should be 0rad to 2rad.</ListItem>
+                                <ListItem>• The Vd value range should be 0rad to 3rad.</ListItem>
                             </List>
                         </Grid>
                     </Grid>
@@ -138,7 +158,7 @@ function Home() {
                 {/* About Section */}
                 <Grid item xs={12}>
                     <Grid container spacing={0}>
-                        <Grid item xs={12} md={3} style={{display: 'flex', alignItems: 'center'}}>
+                        <Grid item xs={12} md={3} style={{ display: 'flex', alignItems: 'center' }}>
                             <Typography variant="h6">
                                 About <br />
                                 <span style={{ color: '#0F0B81', fontSize: "30px" }}>MotorMind </span>
@@ -153,13 +173,6 @@ function Home() {
                                 precise predictions and real-time insights, enabling enhanced motor performance,
                                 reduced downtime, and optimized system efficiency for developers and engineers.
                             </Typography>
-                            <Grid item xs={3} md={2} style={{ marginTop: '20px' }}>
-                                <Button fullWidth variant="contained"
-                                    className={classes.button}
-                                >
-                                    Read More
-                                </Button>
-                            </Grid>
                         </Grid>
                     </Grid>
                 </Grid>
