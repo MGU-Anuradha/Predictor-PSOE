@@ -20,7 +20,7 @@ function Home() {
                 Vd: parseFloat(vd),
                 Vq: parseFloat(vq),
             });
-            setPsoeValue(response.data.psoeValue || 'N/A'); // Assuming `psoeValue` is returned
+            setPsoeValue(response.data.prediction || 'N/A');
         } catch (error) {
             setErrorMessage('Error predicting PSOE. Please check your inputs or try again later.');
         }
