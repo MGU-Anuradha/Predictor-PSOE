@@ -97,6 +97,10 @@ def predict():
 
         # Denormalize the prediction to match the MATLAB output range
         prediction_value = denormalize_output(prediction[0][0])
+
+        # Round the prediction to 4 decimal places
+        prediction_value = round(prediction_value, 4)
+
         print(prediction_value)
         # Return the prediction as a JSON response
         return jsonify({'prediction': prediction_value})
