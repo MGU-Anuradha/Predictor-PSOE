@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Grid, Typography, Button, List, ListItem, InputBase, Box, useMediaQuery } from '@mui/material';
+import { Grid, Typography, Button, InputBase, Box, useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import Header from './Header';
 import Footer from './Footer';
@@ -72,7 +72,7 @@ function Home() {
                         <InputBase
                             className={classes.textFeild}
                             type="text"
-                            placeholder="Enter Vd value in radian (rad)"
+                            placeholder="Enter Vd voltage (V)"
                             value={vd}
                             onChange={(e) => setVd(e.target.value)}
                             required
@@ -82,7 +82,7 @@ function Home() {
                         <InputBase
                             className={classes.textFeild}
                             type="text"
-                            placeholder="Enter Vq value in radian (rad)"
+                            placeholder="Enter Vq voltage (V)"
                             value={vq}
                             onChange={(e) => setVq(e.target.value)}
                             required
@@ -137,20 +137,29 @@ function Home() {
                 {/* Conditions */}
                 <Grid item xs={12}>
                     <Grid container spacing={0}>
-                        <Grid item xs={12} md={8} style={{ marginTop: "40px" }}>
-                            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Conditions: </Typography>
+                        <Grid item xs={12} md={8} style={{ margin: "40px 0px" }}>
+                            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Conditions:</Typography>
                             <Typography variant="body1">
-                                Currently, the PSOE value can only be predicted for PMSM motors operating under the following conditions,                            </Typography>
-                            <List>
-                                <ListItem>• Number of Poles should be 8.</ListItem>
-                                <ListItem>• The motor speed should be 200 rpm.</ListItem>
-                                {/* <ListItem>• Current values I_qs^r ref should be 2A, and I_ds^r ref current is not required.</ListItem> */}
-                                <ListItem>• The Motor Phase Resistance should be 0.00714 Ω.</ListItem>
-                                <ListItem>• The Motor Phase Inductance should be 158.7915 μH.</ListItem>
-                                <ListItem>• The Back EMF Constant (𝜆𝑚′) should be 0.07598 V/(rads⁻¹).</ListItem>
-                                <ListItem>• The Vd value range should be 0rad to 2rad.</ListItem>
-                                <ListItem>• The Vd value range should be 0rad to 3rad.</ListItem>
-                            </List>
+                                Currently, the PSOE value can only be predicted for a specific PMSM motor operating under the following conditions:
+                            </Typography>
+                            <Typography variant="body1" style={{ marginTop: "20px", fontWeight: 'bold' }}>
+                                Operating Conditions:
+                            </Typography>
+                            <Typography variant="body1" component="ul" style={{ marginLeft: "20px" }}>
+                                <li>PMSM Speed: 200 rpm</li>
+                                <li>Motor q-axis current reference (Iq_ref): 2A</li>
+                                <li>Motor d-axis current reference (Id_ref): 0A</li>
+                                <li>Motor q-axis voltage range: 0V - 3V</li>
+                                <li>Motor d-axis voltage range: 0V - 2V</li>
+                            </Typography>
+                            <Typography variant="body1" style={{ marginTop: "20px", fontWeight: 'bold' }}>
+                                Selected PMSM Motor Parameters:
+                            </Typography>
+                            <Typography variant="body1" component="ul" style={{ marginLeft: "20px" }}>
+                                <li>Phase Resistance: 0.00714 Ω</li>
+                                <li>Phase Inductance: 158.7915 μH</li>
+                                <li>Back EMF Constant (𝜆𝑚′): 0.07598 V/(rads⁻¹)</li>
+                            </Typography>
                         </Grid>
                     </Grid>
                 </Grid>
