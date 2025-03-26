@@ -10,6 +10,9 @@ This project is a React-based web application for analyzing **Position Sensor Of
 - Responsive layout for mobile and desktop devices.
 - About section detailing the MotorMind platform.
 
+  ![image](https://github.com/user-attachments/assets/942d600f-7ac5-42df-bb7f-0e3bda97a575)
+
+
 ---
 
 ## Prerequisites
